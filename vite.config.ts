@@ -1,0 +1,28 @@
+import { defineConfig } from "vite";
+import { resolve } from "node:path";
+import { existsSync, readdirSync } from "node:fs";
+
+const root = __dirname;
+const gamesDir = resolve(root, "games");
+
+function collectHtmlEntries(): Record<string, string> {
+  const entries: Record<string, string> = {
+    main: resolve(root, "index.html"),
+  };
+
+  for (const dirent of readdirSync(gamesDir, { withFileTypes: true })) {
+    if (!dirent.isDirectory()) continue;
+    const htmlPath = resolve(gamesDir, dirent.name, "index.html");
+    if (existsSync(htmlPath)) entries[dirent.name] = htmlPath;
+  }
+
+  return entries;
+}
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: collectHtmlEntries(),
+    },
+  },
+});
