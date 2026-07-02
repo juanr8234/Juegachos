@@ -137,6 +137,7 @@ export class Game {
       this.hud.setBest(this.best);
     }
     this.hud.showGameOver(this.score, this.best);
+    this.hud.showRanking("city-bloxx", this.score);
   }
 
   /** Resolves a dropped block: a miss ends the run, a hit stacks and rebalances. */

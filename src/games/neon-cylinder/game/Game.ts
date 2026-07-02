@@ -126,6 +126,7 @@ export class Game {
     }
     this.hud.setBest(this.best);
     this.hud.showGameOver(this.score, this.best);
+    this.hud.showRanking("neon-cylinder", this.score);
   }
 
   private readonly tick = (): void => {

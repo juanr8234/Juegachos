@@ -185,6 +185,7 @@ export class Game {
     
     this.state = "gameOver";
     this.hud.showGameOver(this.roundTimes, average, isNewBest, this.bestAverage);
+    this.hud.showRanking("reaction-time", average);
   }
   
   private calculateCurrentAverage(): number | null {

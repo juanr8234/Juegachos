@@ -111,6 +111,7 @@ export class Game {
       this.hud.setBest(this.best);
     }
     this.hud.showGameOver(score, this.best);
+    this.hud.showRanking("stack-tower", score);
   }
 
   private tick = (now: number): void => {

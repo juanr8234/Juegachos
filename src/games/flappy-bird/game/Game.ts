@@ -97,6 +97,7 @@ export class Game {
       this.hud.setBest(this.best);
     }
     this.hud.showGameOver(this.score, this.best);
+    this.hud.showRanking("flappy-bird", this.score);
   }
 
   private tick = (now: number): void => {

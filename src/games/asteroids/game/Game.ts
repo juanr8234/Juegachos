@@ -211,6 +211,7 @@ export class Game {
         this.hud.setBest(this.bestScore);
       }
       this.hud.showGameOver(this.score, this.bestScore);
+      this.hud.showRanking("asteroids", this.score);
     } else {
       // Clean up nearby asteroids so user doesn't die immediately on respawn
       const safeRadius = 150;

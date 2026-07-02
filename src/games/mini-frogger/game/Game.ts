@@ -385,6 +385,7 @@ export class Game {
     }
 
     this.hud.showGameOver(this.score, this.best);
+    this.hud.showRanking("mini-frogger", this.score);
   }
 
   private tick(timestamp: number): void {

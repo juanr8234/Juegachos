@@ -268,6 +268,7 @@ export class Game {
       bestTime,
       this.size
     );
+    this.hud.showRanking("sliding-puzzle", this.moves, this.size);
   }
 
   private tick = (now: number): void => {

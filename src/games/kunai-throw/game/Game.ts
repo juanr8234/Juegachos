@@ -173,6 +173,7 @@ export class Game {
       this.hud.setBest(this.best);
     }
     this.hud.showGameOver(this.score, this.best);
+    this.hud.showRanking("kunai-throw", this.score);
   }
 
   private tick = (now: number): void => {

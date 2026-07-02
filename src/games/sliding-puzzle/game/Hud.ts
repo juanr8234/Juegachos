@@ -1,7 +1,9 @@
 import { BEST_KEY_PREFIX } from "./constants";
+import { LeaderboardPanel } from "../../../shared/LeaderboardPanel";
 
 export class Hud {
   private readonly container: HTMLElement;
+  private readonly leaderboard = new LeaderboardPanel();
   
   // Elements
   private hudBar!: HTMLDivElement;
@@ -94,6 +96,8 @@ export class Hud {
       this.bestScoresEl,
       this.hintEl
     );
+    this.leaderboard.mount(this.overlayEl);
+    this.leaderboard.clear();
 
     // 4. Countdown Screen
     this.countdownEl = document.createElement("div");
@@ -139,8 +143,15 @@ export class Hud {
     });
 
     this.updateBestScoreDisplay(this.currentGridSize);
-    
+
     this.hintEl.textContent = "presiona ENTER o haz clic en cualquier lugar para comenzar";
+
+    this.leaderboard.clear();
+  }
+
+  /** Muestra el ranking global (menos movimientos = mejor) por tamano de tablero. */
+  showRanking(gameId: string, moves: number, size: number): void {
+    void this.leaderboard.render(gameId, { score: moves, variant: String(size) });
   }
 
   private updateBestScoreDisplay(size: number): void {

@@ -1,3 +1,5 @@
+import { LeaderboardPanel } from "../../../shared/LeaderboardPanel";
+
 /** DOM overlay: live score plus start / game-over screens. */
 export class Hud {
   private readonly scoreEl: HTMLDivElement;
@@ -8,6 +10,7 @@ export class Hud {
   private readonly scoreLineEl: HTMLDivElement;
   private readonly hintEl: HTMLDivElement;
   private readonly countdownEl: HTMLDivElement;
+  private readonly leaderboard = new LeaderboardPanel();
 
   constructor(container: HTMLElement) {
     const hud = document.createElement("div");
@@ -39,6 +42,8 @@ export class Hud {
     this.hintEl.textContent = "espacio / clic / toca para soltar";
 
     this.overlayEl.append(this.titleEl, this.subtitleEl, this.scoreLineEl, this.hintEl);
+    this.leaderboard.mount(this.overlayEl);
+    this.leaderboard.clear();
 
     this.countdownEl = document.createElement("div");
     this.countdownEl.className = "countdown";
@@ -78,6 +83,7 @@ export class Hud {
     this.subtitleEl.textContent = "presiona ENTER o toca para empezar";
     this.scoreLineEl.textContent = "";
     this.hintEl.style.display = "block";
+    this.leaderboard.clear();
     this.overlayEl.classList.remove("hidden");
   }
 
@@ -90,6 +96,11 @@ export class Hud {
         : `PUNTAJE: ${score}  ·  MEJOR: ${best}`;
     this.hintEl.style.display = "none";
     this.overlayEl.classList.remove("hidden");
+  }
+
+  /** Muestra el ranking global del juego en la pantalla de game-over. */
+  showRanking(gameId: string, score: number): void {
+    void this.leaderboard.render(gameId, { score });
   }
 
   hide(): void {

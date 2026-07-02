@@ -172,6 +172,7 @@ export class Game {
       this.hud.setBest(this.best);
     }
     this.hud.showGameOver(this.score, this.best);
+    this.hud.showRanking("rhythm-tap", this.score);
   }
 
   private tick = (now: number): void => {

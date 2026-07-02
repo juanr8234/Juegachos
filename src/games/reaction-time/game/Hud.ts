@@ -1,4 +1,5 @@
 import { TOTAL_ROUNDS } from "./constants";
+import { LeaderboardPanel } from "../../../shared/LeaderboardPanel";
 
 export type RoundStatus = "empty" | "success" | "foul";
 
@@ -24,6 +25,8 @@ export class Hud {
   
   // Countdown
   private readonly countdownEl: HTMLDivElement;
+
+  private readonly leaderboard = new LeaderboardPanel();
 
   constructor(container: HTMLElement) {
     // Create the main interactive reaction card
@@ -96,6 +99,8 @@ export class Hud {
       this.tableContainerEl,
       this.hintEl
     );
+    this.leaderboard.mount(this.overlayEl);
+    this.leaderboard.clear();
 
     // Create countdown overlay
     this.countdownEl = document.createElement("div");
@@ -131,6 +136,13 @@ export class Hud {
     this.mainCard.className = "reaction-card state-idle";
     this.statusText.textContent = "Reaction Time";
     this.subStatusText.textContent = "presiona ENTER o haz clic para comenzar";
+
+    this.leaderboard.clear();
+  }
+
+  /** Muestra el ranking global (menor promedio ms = mejor) al terminar. */
+  showRanking(gameId: string, averageMs: number): void {
+    void this.leaderboard.render(gameId, { score: averageMs });
   }
 
   showCountdown(text: string | null): void {

@@ -1,3 +1,5 @@
+import { LeaderboardPanel } from "../../../shared/LeaderboardPanel";
+
 export class Hud {
   private readonly scoreEl: HTMLDivElement;
   private readonly bestEl: HTMLDivElement;
@@ -9,6 +11,7 @@ export class Hud {
   private readonly hintEl: HTMLDivElement;
   private readonly countdownEl: HTMLDivElement;
   private readonly btnEl: HTMLButtonElement;
+  private readonly leaderboard = new LeaderboardPanel();
 
   constructor(container: HTMLElement, onStartClick: () => void) {
     // Score & best score elements
@@ -52,6 +55,8 @@ export class Hud {
     this.hintEl.className = "overlay__hint";
 
     this.overlayEl.append(this.titleEl, this.subtitleEl, this.scoreLineEl, this.btnEl, this.hintEl);
+    this.leaderboard.mount(this.overlayEl);
+    this.leaderboard.clear();
 
     // Countdown element
     this.countdownEl = document.createElement("div");
@@ -109,7 +114,13 @@ export class Hud {
       <span class="overlay__hint-keys">Espacio</span> : Disparar Láser<br>
       <span class="overlay__hint-keys">Enter</span> : Iniciar / Reintentar
     `;
+    this.leaderboard.clear();
     this.overlayEl.classList.remove("hidden");
+  }
+
+  /** Muestra el ranking global del juego en la pantalla de game-over. */
+  showRanking(gameId: string, score: number): void {
+    void this.leaderboard.render(gameId, { score });
   }
 
   showGameOver(score: number, best: number): void {

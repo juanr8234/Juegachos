@@ -1,3 +1,5 @@
+import { LeaderboardPanel } from "../../../shared/LeaderboardPanel";
+
 export class Hud {
   private readonly scoreEl: HTMLDivElement;
   private readonly bestEl: HTMLDivElement;
@@ -9,6 +11,7 @@ export class Hud {
   private readonly hintEl: HTMLDivElement;
   private readonly countdownEl: HTMLDivElement;
   private readonly btnEl: HTMLButtonElement;
+  private readonly leaderboard = new LeaderboardPanel();
 
   constructor(container: HTMLElement, onStartClick: () => void) {
     const hud = document.createElement("div");
@@ -51,6 +54,8 @@ export class Hud {
     this.hintEl.className = "overlay__hint";
 
     this.overlayEl.append(this.titleEl, this.subtitleEl, this.scoreLineEl, this.btnEl, this.hintEl);
+    this.leaderboard.mount(this.overlayEl);
+    this.leaderboard.clear();
 
     this.countdownEl = document.createElement("div");
     this.countdownEl.className = "countdown";
@@ -94,7 +99,13 @@ export class Hud {
       No dejes que un kunai golpee a otro.<br>
       <span class="overlay__hint-keys">Enter</span> : Iniciar / Reintentar
     `;
+    this.leaderboard.clear();
     this.overlayEl.classList.remove("hidden");
+  }
+
+  /** Muestra el ranking global del juego en la pantalla de game-over. */
+  showRanking(gameId: string, score: number): void {
+    void this.leaderboard.render(gameId, { score });
   }
 
   showGameOver(score: number, best: number): void {

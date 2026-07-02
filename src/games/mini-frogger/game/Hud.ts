@@ -1,4 +1,5 @@
 import { LIVES_START } from "./constants";
+import { LeaderboardPanel } from "../../../shared/LeaderboardPanel";
 
 export class Hud {
   private scoreEl!: HTMLElement;
@@ -11,6 +12,7 @@ export class Hud {
   private overlayStat2ValEl!: HTMLElement;
   private overlayButtonEl!: HTMLElement;
   private mobileControlsEl!: HTMLElement;
+  private readonly leaderboard = new LeaderboardPanel();
 
   private onActionCallback?: () => void;
   private onMoveCallback?: (dx: number, dy: number) => void;
@@ -83,6 +85,9 @@ export class Hud {
     this.overlayStat2ValEl = this.overlayEl.querySelector("#overlay-stat-2")!;
     this.overlayButtonEl = this.overlayEl.querySelector("#overlay-button")!;
 
+    this.leaderboard.mount(this.overlayEl.querySelector(".overlay__card")!);
+    this.leaderboard.clear();
+
     // 3. Mobile virtual D-Pad buttons
     this.mobileControlsEl = document.createElement("div");
     this.mobileControlsEl.className = "mobile-controls";
@@ -147,7 +152,13 @@ export class Hud {
     this.overlayStat1ValEl.textContent = "0";
     this.overlayStat2ValEl.textContent = String(best);
     this.overlayButtonEl.textContent = "JUGAR";
+    this.leaderboard.clear();
     this.overlayEl.classList.remove("hidden");
+  }
+
+  /** Muestra el ranking global del juego en la pantalla de game-over. */
+  public showRanking(gameId: string, score: number): void {
+    void this.leaderboard.render(gameId, { score });
   }
 
   public showGameOver(score: number, best: number): void {
