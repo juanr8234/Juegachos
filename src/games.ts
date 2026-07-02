@@ -151,6 +151,14 @@ export const games: GameEntry[] = [
     accent: "#ffdd53",
     category: "Precisión",
   },
+  {
+    id: "shell-game",
+    title: "El Trile",
+    description: "Sigue con la mirada el vaso que oculta la moneda. ¡Cada nivel mezcla más rápido, hace más pases y agrega más vasos!",
+    path: "/games/shell-game/",
+    accent: "#ffdd53",
+    category: "Reflejos",
+  },
 ];
 
 
