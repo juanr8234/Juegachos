@@ -33,6 +33,7 @@ dist-ssr
 claude.md
 .mcp.json
 skills-lock.json
+.claude
 
 # Directorios
 docs/
