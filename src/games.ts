@@ -120,6 +120,14 @@ export const games: GameEntry[] = [
     category: "Precisión",
   },
   {
+    id: "penalty-keeper",
+    title: "Keepers!",
+    description: "Sos el arquero en una tanda infinita de penales: movete y saltá para atajar. Tres goles y se termina.",
+    path: "/games/penalty-keeper/",
+    accent: "#38e07b",
+    category: "Reflejos",
+  },
+  {
     id: "rocket-arena",
     title: "Rocket SpaceX",
     description: "Fútbol de autos en 3D estilo Rocket League: 2v2 con bots, o en salas con los autos de todos en vivo.",
