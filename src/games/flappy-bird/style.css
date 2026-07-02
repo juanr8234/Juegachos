@@ -89,6 +89,7 @@ body {
   background: radial-gradient(circle at center, rgba(78, 192, 230, 0.15) 0%, rgba(20, 60, 90, 0.55) 90%);
   text-align: center;
   pointer-events: auto;
+  touch-action: manipulation;
   z-index: 20;
   transition: opacity 0.3s ease;
 }

@@ -44,7 +44,10 @@ export class Game {
     this.hud.showScore(false);
     this.hud.showStart();
 
-    this.input = new InputController(this.canvas, () => this.onFlap());
+    // Listen on the container, not the canvas: the start / game-over overlay
+    // sits above the canvas, so taps there must still start the game (mobile
+    // has no Enter key). The leaderboard stops propagation for its own UI.
+    this.input = new InputController(container, () => this.onFlap());
 
     this.resize();
     window.addEventListener("resize", this.resize);
