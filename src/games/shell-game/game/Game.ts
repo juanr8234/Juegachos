@@ -176,8 +176,10 @@ export class Game {
     const cupsCount = this.cups.length;
     const coin = this.hud.coin;
     coin.classList.remove("hidden");
-    // Align coin center with cup center in slot
-    coin.style.left = `calc(${slot} * (100% - var(--cup-width)) / ${cupsCount - 1} + (var(--cup-width) - var(--coin-size)) / 2)`;
+    // Align the coin center with the cup center: point `left` at the cup center
+    // and let the `.coin` rule's translateX(-50%) do the centering. (Subtracting
+    // half the coin width here as well would double-center and shift it sideways.)
+    coin.style.left = `calc(${slot} * (100% - var(--cup-width)) / ${cupsCount - 1} + var(--cup-width) / 2)`;
   }
 
   private async animateRevealCoin(): Promise<void> {
