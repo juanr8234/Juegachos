@@ -104,6 +104,14 @@ export const games: GameEntry[] = [
     category: "Reflejos",
   },
   {
+    id: "dunk-shot",
+    title: "Dunk Shot",
+    description: "Estira, apunta y encesta la pelota en el aro siguiente encadenando canastas perfectas.",
+    path: "/games/dunk-shot/",
+    accent: "#ff7a45",
+    category: "Precisión",
+  },
+  {
     id: "kunai-throw",
     title: "Kunai Strike",
     description: "Arroja kunais y clávalos en el tronco que gira sin que un kunai golpee a otro.",
