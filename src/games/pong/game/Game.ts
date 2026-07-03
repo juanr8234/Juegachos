@@ -38,10 +38,11 @@ export class Game {
   private readonly input: InputController;
   private readonly room: RoomMode | null;
   private readonly isRoomMode: boolean;
-  private readonly pongChan: PongChannel | null = null;
+  private pongChan: PongChannel | null = null;
 
-  private readonly amPlayer1: boolean;
-  private readonly hasOpponent: boolean;
+  private amPlayer1 = true;
+  private hasOpponent = false;
+  private rolesReady = false;
   private opponentPaddleY = VIEW_HEIGHT / 2 - PADDLE_HEIGHT / 2;
   private broadcastTimer = 0;
 
@@ -74,44 +75,8 @@ export class Game {
     });
     this.isRoomMode = this.room !== null;
 
-    if (this.isRoomMode) {
-      const room = this.room!;
-      const players = room.players();
-      const myIdx = players.indexOf(room.me);
-      this.amPlayer1 = myIdx % 2 === 0;
-      const oppIdx = this.amPlayer1 ? myIdx + 1 : myIdx - 1;
-      this.hasOpponent = oppIdx >= 0 && oppIdx < players.length;
-
-      if (this.hasOpponent) {
-        this.pongChan = new PongChannel(room.code, room.me);
-
-        this.pongChan.onPaddle((_player, y) => {
-          this.opponentPaddleY = y;
-        });
-
-        if (!this.amPlayer1) {
-          this.pongChan.onBall((state) => {
-            this.ballTargetX = state.x;
-            this.ballTargetY = state.y;
-            this.ball.vx = state.vx;
-            this.ball.vy = state.vy;
-            this.ball.speed = state.speed;
-            this.ball.hits = state.hits;
-            this.score = state.p2Score;
-            this.opponentScore = state.p1Score;
-            this.hasReceivedBall = true;
-          });
-        }
-      }
-    } else {
-      this.amPlayer1 = true;
-      this.hasOpponent = false;
-    }
-
     this.hud.setHintText(
-      this.isRoomMode && this.hasOpponent
-        ? this.amPlayer1 ? "W/S — sos J1 (izquierda)" : "FLECHAS — sos J2 (derecha)"
-        : "flechas / W S para mover",
+      this.isRoomMode ? "esperando emparejamiento…" : "flechas / W S para mover",
     );
 
     this.input = new InputController(
@@ -138,7 +103,53 @@ export class Game {
     }
   }
 
+  /**
+   * Fija el rol (J1 izquierda / J2 derecha / vs IA) y crea el canal recien
+   * cuando arranca la ronda: en el constructor la lista de jugadores del room
+   * todavia no cargo (boot() es async), asi que hay que resolverla aca, cuando
+   * onStart dispara la cuenta regresiva y room.players() ya esta poblada.
+   */
+  private setupRoles(): void {
+    if (!this.isRoomMode || this.rolesReady) return;
+    const room = this.room!;
+    const players = room.players();
+    const myIdx = players.indexOf(room.me);
+    if (myIdx < 0) return; // lista aun no disponible: reintentar en el proximo inicio
+
+    this.amPlayer1 = myIdx % 2 === 0;
+    const oppIdx = this.amPlayer1 ? myIdx + 1 : myIdx - 1;
+    this.hasOpponent = oppIdx >= 0 && oppIdx < players.length;
+
+    if (this.hasOpponent) {
+      this.pongChan = new PongChannel(room.code, room.me);
+      this.pongChan.onPaddle((_player, y) => {
+        this.opponentPaddleY = y;
+      });
+      if (!this.amPlayer1) {
+        this.pongChan.onBall((state) => {
+          this.ballTargetX = state.x;
+          this.ballTargetY = state.y;
+          this.ball.vx = state.vx;
+          this.ball.vy = state.vy;
+          this.ball.speed = state.speed;
+          this.ball.hits = state.hits;
+          this.score = state.p2Score;
+          this.opponentScore = state.p1Score;
+          this.hasReceivedBall = true;
+        });
+      }
+    }
+
+    this.hud.setHintText(
+      this.hasOpponent
+        ? this.amPlayer1 ? "W/S — sos J1 (izquierda)" : "FLECHAS — sos J2 (derecha)"
+        : "flechas / W S para mover (vs IA)",
+    );
+    this.rolesReady = true;
+  }
+
   private beginCountdown(): void {
+    this.setupRoles();
     this.state = "countdown";
     this.countdownTime = 0;
     this.lastCountdownIndex = -1;
@@ -161,10 +172,14 @@ export class Game {
 
     if (this.isRoomMode) {
       this.hud.showScoreRoom(0, 0);
-      if (this.amPlayer1) {
+      if (!this.hasOpponent) {
+        // Impar / sin pareja: juega contra la IA, lanza la pelota localmente.
+        this.ball.launch(true);
+      } else if (this.amPlayer1) {
         this.ball.launch(Math.random() < 0.5);
         this.broadcastBall();
       }
+      // J2 con pareja: espera el estado de la pelota por broadcast.
     } else {
       this.hud.setScore(0);
       this.hud.showScore(true);

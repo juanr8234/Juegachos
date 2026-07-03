@@ -37,7 +37,13 @@ Wired to the shared party mode: the constructor calls `initRoomMode("pong", { ge
 
 With `?room=` in the URL and Supabase connected, Pong becomes **online player-vs-player**. Each player controls one paddle from their own device:
 
-- **Pairing by index.** The room's player list is paired `(0,1), (2,3), ...`. Index even = P1 (left paddle, W/S). Index odd = P2 (right paddle, Arrow keys). If the count is odd, the last player is unpaired and plays vs AI (standard left-paddle controls, first to 7).
+- **Pairing by index.** The room's player list is paired `(0,1), (2,3), ...`. Index even = P1 (left paddle, W/S). Index odd = P2 (right paddle, Arrow keys). If the count is odd, the last player is unpaired and plays vs AI (combined W/S + arrows controls, first to 7). The player list is ordered by `joined_at` from the DB, so every client agrees on the pairing.
+
+- **Roles are resolved at round start, not in the constructor.** `initRoomMode` returns synchronously but loads `room.players()` asynchronously (`boot()`), so the list is still empty during construction. `Game.setupRoles()` (called from `beginCountdown()`, which `onStart` fires once the round is `playing`) is where the paddle side, opponent, and `PongChannel` get resolved — by then `players()` is populated. Computing this in the constructor misclassifies everyone as unpaired.
+
+- **The unpaired (vs-AI) player launches the ball locally.** Only P1 serves in a paired match (P2 receives the ball over the channel); an unpaired player has no P1, so `start()` launches the ball itself when `!hasOpponent`. Otherwise the ball would sit frozen at center.
+
+- **Broadcast payload nesting.** Supabase wraps broadcast data as `{ type, event, payload }`; `PongChannel` destructures `({ payload }) => ...` to read the real data (matching car-race / rocket-arena). Reading the envelope directly yields `undefined` fields (frozen ball, motionless opponent paddle).
 
 - **P1 is ball authority.** P1 (even index, left paddle) runs the full game simulation (both paddles, ball physics, collisions) and broadcasts the ball state via a dedicated Supabase Realtime channel (`room:{code}:pong`, event `"ball"`) at 20 fps.
 
