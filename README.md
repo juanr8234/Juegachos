@@ -32,7 +32,17 @@ Hecho con **Vite + TypeScript** (sin framework) y desplegado como sitio estátic
 | Crono Ciego | Precisión | Detené el cronómetro a ciegas lo más cerca del tiempo objetivo. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
 | El Trile | Reflejos | Seguí con la mirada el vaso que oculta la moneda. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
 | PONG | Arcade | Pong clásico de un jugador: devolvé la pelota, la velocidad sube y tenés una sola vida. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
-| Block Paddle | Arcade | Moví la barra para que la pelota no caiga; cada rebote suma y acelera. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Block Paddle | Arcade | Mové la barra para que la pelota no caiga; cada rebote acelera. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Helix Jump | Arcade | Rotá la torre para hacer descender la bola a través de los huecos, esquivando los obstáculos de color. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Simon | Reflejos | Memorizá la secuencia de colores y repetila. Cada ronda suma un paso más: gana quien aguante más lejos. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Snake | Arcade | Guiá la serpiente para comer, crecé con cada bocado y evitá chocar con las paredes o con tu propia cola. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Ta-Te-Ti | Puzzle | Ta-Te-Ti sin empates: al colocar tu cuarta ficha desaparece la primera. Solo contra una IA difícil o PvP en salas. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Topos | Precisión | Aplastá todos los topos que asomen en 60 segundos. Los dorados valen más y las bombas restan. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Neon Sawblades | Arcade | Corré y saltá sobre las sierras neón que caen para destruirlas, juntá las monedas y estirá el reloj lo máximo que puedas. | [emi1i0](https://github.com/emi1i0) |
+| Conecta 4 | Puzzle | Soltá fichas y alineá 4 en fila, columna o diagonal. Solo contra una IA difícil (racha de victorias) o PvP por turnos en salas. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Mecano | Reflejos | Juego de mecanografía: escribí la mayor cantidad de palabras en 30 segundos y sumá tu velocidad en palabras por minuto. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Torres de Hanoi | Puzzle | Mové la torre de discos a la última varilla en la menor cantidad de movimientos, sin apoyar un disco sobre otro más chico. Elegí de 3 a 7 discos o votalos en salas. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
+| Space Rush | Arcade | Pilotá un caza por el espacio esquivando campos de meteoritos, cristales de hielo y chatarra, con Saturno de fondo. Cada vez vas más rápido. | [Facu-Basualdo](https://github.com/Facu-Basualdo) |
 
 ## Empezar
 

@@ -142,6 +142,10 @@ export class Game {
     const container = this.hud.cupsContainer;
     container.innerHTML = "";
 
+    // Build the new board invisible so playShufflingSequence can fade it in,
+    // giving a smooth cross-dissolve instead of the cups popping into place.
+    this.hud.hideBoardForFade();
+
     for (let i = 0; i < cupsCount; i++) {
       const cupEl = document.createElement("div");
       cupEl.className = "cup";
@@ -382,6 +386,10 @@ export class Game {
 
   private startNextLevel(): void {
     this.hud.showCountdown(null);
+    // Keep a ghost of the finished board on screen while the next one is rebuilt,
+    // so they crossfade (the new board is faded in and the ghost faded out by
+    // playShufflingSequence -> revealBoard) instead of blanking out for a frame.
+    this.hud.beginCrossfade();
     this.startRound();
   }
 
@@ -744,6 +752,7 @@ export class Game {
 
       if (!config) {
         this.initBoard(3, 1);
+        this.hud.revealBoard();
         SoundEffects.playStart();
         await this.animateRevealCoin();
         const fallbackSwaps = this.generateSwapsList(3, 3);
@@ -759,6 +768,7 @@ export class Game {
       this.hud.updateStats(this.level);
 
       this.initBoard(config.cupsCount, config.initialCoinSlot);
+      this.hud.revealBoard();
       SoundEffects.playStart();
       await this.animateRevealCoin();
       await this.runShuffling(config.swaps, config.speed);
@@ -775,6 +785,7 @@ export class Game {
       this.currentCoinSlot = Math.min(this.currentCoinSlot, config.cups - 1);
       
       this.initBoard(config.cups, this.currentCoinSlot);
+      this.hud.revealBoard();
       SoundEffects.playStart();
       await this.animateRevealCoin();
       
