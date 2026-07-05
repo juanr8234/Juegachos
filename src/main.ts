@@ -372,6 +372,7 @@ main.className = "page";
 main.append(hero, filtersBar);
 if (roomsOn) main.append(roomsBanner);
 main.append(grid, empty);
+
 app.append(nav, main, footer);
 
 // Reordena las cards segun el modo actual: mueve los nodos existentes al nuevo
